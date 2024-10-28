@@ -34,8 +34,6 @@ The app will fetch movie data from a backend API and display it within a React/N
 
 <img width="1440" alt="Screen Shot 2024-10-28 at 4 23 35 PM" src="https://github.com/user-attachments/assets/5fe830cf-5f8a-4c1f-a79c-1266e7c01256">
 <img width="1440" alt="Screen Shot 2024-10-28 at 4 24 17 PM" src="https://github.com/user-attachments/assets/72bb78db-4747-4056-bf04-b46b40e0f1ec">
-<img width="1440" alt="Screen Shot 2024-10-28 at 4 26 28 PM" src="ht<img width="1440" alt="Screen Shot 2024-10-28 at 4 25 36 PM" src="https://github.com/user-attachments/assets/f5e56649-d8c7-46f1-ac1b-818dadca3902">
-tps://github.com/user-attachments/assets/ae8c0c1f-4517-4ea5-a36c-634bc721427c">
 <img width="1440" alt="Screen Shot 2024-10-28 at 4 24 08 PM" src="https://github.com/user-attachments/assets/398664a2-b12f-466d-875b-8ca2010d885f">
 <img width="1440" alt="Screen Shot 2024-10-28 at 4 25 59 PM" src="https://github.com/user-attachments/assets/53936256-99f0-491c-83c1-a9b1ea5c3687">
 
