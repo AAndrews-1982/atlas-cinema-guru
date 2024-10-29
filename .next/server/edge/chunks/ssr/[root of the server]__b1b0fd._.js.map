@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 23, "column": 0}, "map": {"version":3,"sources":["turbopack://[project]/auth.ts"],"sourcesContent":["import NextAuth from \"next-auth\";\n\nexport const { handlers, signIn, signOut, auth } = NextAuth({\n  theme: {\n    brandColor: \"#1ED2AF\",\n    logo: \"/logo.png\",\n    buttonText: \"#ffffff\",\n  },\n  providers: [],\n  callbacks: {\n    authorized: async ({ auth }) => {\n      // Logged in users are authenticated, otherwise redirect to login page\n      return !!auth;\n    },\n  },\n});\n"],"names":[],"mappings":";;;;;;AAAA;AAAA;;AAEO,MAAM,EAAE,QAAQ,EAAE,MAAM,EAAE,OAAO,EAAE,IAAI,EAAE,GAAG,CAAA,GAAA,qJAAA,CAAA,UAAQ,AAAD,EAAE;IAC1D,OAAO;QACL,YAAY;QACZ,MAAM;QACN,YAAY;IACd;IACA,WAAW,EAAE;IACb,WAAW;QACT,YAAY,OAAO,EAAE,IAAI,EAAE;YACzB,sEAAsE;YACtE,OAAO,CAAC,CAAC;QACX;IACF;AACF"}},
+    {"offset": {"line": 46, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}},
+    {"offset": {"line": 52, "column": 0}, "map": {"version":3,"sources":["turbopack://[project]/middleware.ts"],"sourcesContent":["export { auth as middleware } from \"@/auth\";\n\nexport const config = {\n  matcher: [\"/((?!api|_next/static|_next/image|favicon.ico|logo.png).*)\"],\n};\n"],"names":[],"mappings":";;;;AAEO,MAAM,SAAS;IACpB,SAAS;QAAC;KAA6D;AACzE"}},
+    {"offset": {"line": 61, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}

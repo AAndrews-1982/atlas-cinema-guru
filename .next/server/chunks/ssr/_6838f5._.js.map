@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["turbopack://[project]/app/layout.tsx"],"sourcesContent":["import \"@/app/global.css\";\nimport { Metadata } from \"next\";\n\nexport const metadata: Metadata = {\n  title: \"Cinema Guru | Atlas School\",\n};\n\ntype Props = {\n  children: React.ReactNode;\n};\n\nexport default function RootLayout({ children }: Props) {\n  return (\n    <html lang=\"en\">\n      <body className={`antialiased  bg-[#00003c] text-white`}>{children}</body>\n    </html>\n  );\n}\n"],"names":[],"mappings":";;;;;;;AAGO,MAAM,WAAqB;IAChC,OAAO;AACT;AAMe,SAAS,WAAW,EAAE,QAAQ,EAAS;IACpD,qBACE,8OAAC;QAAK,MAAK;kBACT,cAAA,8OAAC;YAAK,WAAW,CAAC,oCAAoC,CAAC;sBAAG;;;;;;;;;;;AAGhE"}},
+    {"offset": {"line": 34, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}},
+    {"offset": {"line": 45, "column": 0}, "map": {"version":3,"sources":["turbopack://[project]/node_modules/next/src/server/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.ts"],"sourcesContent":["module.exports = require('../../module.compiled').vendored[\n  'react-rsc'\n].ReactJsxDevRuntime\n"],"names":["module","exports","require","vendored","ReactJsxDevRuntime"],"mappings":";AAAAA,OAAOC,OAAO,GAAGC,QAAQ,0HAAyBC,QAAQ,CACxD,YACD,CAACC,kBAAkB"}},
+    {"offset": {"line": 47, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}
