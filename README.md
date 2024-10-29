@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Cinema Guru
 
 Welcome to the **Cinema Guru** project! This app allows users to keep track of favorite movies and set up a "Watch Later" list. Built with React and leveraging Next.js, Tailwind CSS, and TypeScript, the app will utilize an existing backend API to manage movie data and incorporate authentication for user interaction.
