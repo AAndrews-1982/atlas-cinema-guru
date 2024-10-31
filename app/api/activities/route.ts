@@ -1,23 +1,28 @@
-import { auth } from "@/auth";
-import { fetchActivities } from "@/lib/data";
 import { NextRequest, NextResponse } from "next/server";
+import { fetchActivities } from "@/lib/data";
+import { auth } from "@/auth";
 
-/**
- * GET /api/activities
- */
-export const GET = auth(async (req: NextRequest): Promise<NextResponse> => {
-  const params = req.nextUrl.searchParams;
-  const page = params.get("page") ? Number(params.get("page")) : 1;
+interface User {
+  email: string;
+}
 
-  if (!req.auth) {
+interface AuthenticatedRequest extends NextRequest {
+  user?: User;
+}
+
+export const GET = async (req: AuthenticatedRequest): Promise<NextResponse> => {
+  // Check authentication and user existence
+  const user = await auth(req);  // Ensure auth returns User | undefined
+  if (!user) {
     return new NextResponse(JSON.stringify({ error: "Unauthorized - Not logged in" }), {
       status: 401,
     });
   }
 
-  const { email } = req.auth.user;
+  req.user = user;  // Manually attach user to request if not done by `auth`
+  const params = req.nextUrl.searchParams;
+  const page = params.get("page") ? parseInt(params.get("page"), 10) : 1;
 
-  const activities = await fetchActivities(page, email);
+  const activities = await fetchActivities(page, user.email);
   return new NextResponse(JSON.stringify({ activities }));
-});
-
+};
