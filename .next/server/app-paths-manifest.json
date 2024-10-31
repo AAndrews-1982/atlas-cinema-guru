@@ -5,8 +5,8 @@
   "/api/favorites/route": "app/api/favorites/route.js",
   "/api/activities/route": "app/api/activities/route.js",
   "/api/favorites/[id]/route": "app/api/favorites/[id]/route.js",
-  "/api/titles/route": "app/api/titles/route.js",
   "/api/watch-later/[id]/route": "app/api/watch-later/[id]/route.js",
   "/api/watch-later/route": "app/api/watch-later/route.js",
+  "/api/titles/route": "app/api/titles/route.js",
   "/page": "app/page.js"
 }
