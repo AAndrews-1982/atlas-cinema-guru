@@ -1,28 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchActivities } from "@/lib/data";
-import { auth } from "@/auth";
+import { getSession } from "next-auth/react"; // Use getSession instead of getToken
 
-interface User {
-  email: string;
-}
-
-interface AuthenticatedRequest extends NextRequest {
-  user?: User;
-}
-
-export const GET = async (req: AuthenticatedRequest): Promise<NextResponse> => {
-  // Check authentication and user existence
-  const user = await auth(req);  // Ensure auth returns User | undefined
-  if (!user) {
-    return new NextResponse(JSON.stringify({ error: "Unauthorized - Not logged in" }), {
+// Define the interface for User right inside the export to reduce global declarations
+export const GET = async (req: NextRequest & { user?: { email: string } }): Promise<NextResponse> => {
+  // Authenticate user and extract email directly
+  const session = await getSession({ req });
+  if (!session?.user?.email) {
+    return NextResponse.rewrite(new URL('/api/auth/unauthorized', req.url), {
       status: 401,
+      statusText: "Unauthorized - Please log in"
     });
   }
 
-  req.user = user;  // Manually attach user to request if not done by `auth`
-  const params = req.nextUrl.searchParams;
-  const page = params.get("page") ? parseInt(params.get("page"), 10) : 1;
+  // Simplify URL parameter access
+  const page = parseInt(req.nextUrl.searchParams.get("page") || "1");
 
-  const activities = await fetchActivities(page, user.email);
-  return new NextResponse(JSON.stringify({ activities }));
+  // Fetch activities based on user email
+  const activities = await fetchActivities(page, session.user.email);
+
+  // Utilize JSON helper for structured responses
+  return NextResponse.json({ activities }, { status: 200 });
 };

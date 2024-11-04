@@ -1,16 +1,29 @@
 import NextAuth from "next-auth";
+import GitHubProvider from "next-auth/providers/github"; // Import path from GitHub
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   theme: {
-    brandColor: "#1ED2AF",
-    logo: "/logo.png",
-    buttonText: "#ffffff",
+    logo: "/logo.png", // Start with logo
+    brandColor: "#1ED2AF", // Then specify the brand color
+    buttonText: "#ffffff", // Lastly, button text color
   },
-  providers: [],
+  providers: [
+    GitHubProvider({ // Use the correct GitHub provider import
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      authorization: {
+        params: {
+          response_type: "code",
+          access_type: "offline",
+          prompt: "consent"
+        },
+      },
+    })
+  ],
   callbacks: {
     authorized: async ({ auth }) => {
-      // Logged in users are authenticated, otherwise redirect to login page
-      return !!auth;
+      // Return true if auth is not null, false otherwise
+      return auth ? true : false;
     },
   },
 });

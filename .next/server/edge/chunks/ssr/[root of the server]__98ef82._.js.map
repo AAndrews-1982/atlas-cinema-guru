@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 23, "column": 0}, "map": {"version":3,"sources":["turbopack://[project]/middleware.ts"],"sourcesContent":["// middleware.ts\nimport { NextResponse } from 'next/server';\nimport { getToken } from 'next-auth/jwt';\n\nexport async function middleware(req: any) {\n  const token = await getToken({ req, secret: process.env.AUTH_SECRET });\n\n  const { pathname } = req.nextUrl;\n\n  // Allow requests if:\n  // 1. The token exists (user is authenticated)\n  // 2. The request is for an API route that starts with '/api/auth' (used for login and logout)\n  if (token || pathname.startsWith('/api/auth')) {\n    return NextResponse.next();\n  }\n\n  // Redirect unauthenticated users to the login page\n  return NextResponse.redirect(new URL('/api/auth/signin', req.url));\n}\n\nexport const config = {\n  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|logo.png).*)'],\n};\n"],"names":[],"mappings":"AAAA,gBAAgB;;;;;AAChB;AACA;AAAA;AADA;;;AAGO,eAAe,WAAW,GAAQ;IACvC,MAAM,QAAQ,MAAM,CAAA,GAAA,qIAAA,CAAA,WAAQ,AAAD,EAAE;QAAE;QAAK,QAAQ,QAAQ,GAAG,CAAC,WAAW;IAAC;IAEpE,MAAM,EAAE,QAAQ,EAAE,GAAG,IAAI,OAAO;IAEhC,qBAAqB;IACrB,8CAA8C;IAC9C,8FAA8F;IAC9F,IAAI,SAAS,SAAS,UAAU,CAAC,cAAc;QAC7C,OAAO,qLAAA,CAAA,eAAY,CAAC,IAAI;IAC1B;IAEA,mDAAmD;IACnD,OAAO,qLAAA,CAAA,eAAY,CAAC,QAAQ,CAAC,IAAI,IAAI,oBAAoB,IAAI,GAAG;AAClE;AAEO,MAAM,SAAS;IACpB,SAAS;QAAC;KAA6D;AACzE"}},
+    {"offset": {"line": 54, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}

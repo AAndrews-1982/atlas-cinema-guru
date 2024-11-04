@@ -1,32 +1,31 @@
 import { fetchWatchLaters } from "@/lib/data";
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { getSession } from "next-auth/react"; // Use getSession for session management
 
 /**
- * GET /api/titles
+ * GET /api/watch-laters
+ * Retrieves the watch later list for the authenticated user.
  */
-export const GET = auth(async (req: NextRequest) => {
-  const params = req.nextUrl.searchParams;
-  const page = params.get("page") ? Number(params.get("page")) : 1;
-  const minYear = params.get("minYear") ? Number(params.get("minYear")) : 0;
-  const maxYear = params.get("maxYear")
-    ? Number(params.get("maxYear"))
-    : new Date().getFullYear();
-  const query = params.get("query") ?? "";
-
-  //@ts-ignore
-  if (!req.auth) {
-    return NextResponse.json(
-      { error: "Unauthorized - Not logged in" },
-      { status: 401 }
-    );
+export const GET = async (req: NextRequest) => {
+  // Handle authentication using getSession which is directly supported by NextAuth
+  const session = await getSession({ req });
+  if (!session || !session.user?.email) {
+    return NextResponse.json({ error: "Unauthorized - Not logged in" }, { status: 401 });
   }
 
-  const {
-    user: { email }, //@ts-ignore
-  } = req.auth;
+  // Extract parameters using URLSearchParams for cleaner access
+  const params = req.nextUrl.searchParams;
+  const page = parseInt(params.get("page") || "1", 10);
+  const minYear = parseInt(params.get("minYear") || "0", 10);
+  const maxYear = parseInt(params.get("maxYear") || `${new Date().getFullYear()}`, 10);
+  const query = params.get("query") || "";
 
-  const watchLater = await fetchWatchLaters(page, email);
-
-  return NextResponse.json({ watchLater });
-});
+  // Fetch the user's watch later items
+  try {
+    const watchLater = await fetchWatchLaters(page, session.user.email);
+    return NextResponse.json({ watchLater });
+  } catch (error) {
+    console.error("Failed to fetch watch later items:", error);
+    return NextResponse.json({ error: "Server error fetching watch later items" }, { status: 500 });
+  }
+};
