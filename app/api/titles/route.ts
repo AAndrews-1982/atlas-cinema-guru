@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 import { getSession } from "next-auth/react"; // Use getSession for authentication
-=======
 import { auth } from "@/auth";
->>>>>>> 25e2ed2 (still not able to load images)
 import { fetchGenres, fetchTitles } from "@/lib/data";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -53,7 +50,7 @@ const validateParams = (params: TitlesQueryParams): { isValid: boolean; error?: 
 
 /**
  * GET /api/titles
-<<<<<<< HEAD
+
  * Retrieves a list of titles based on the provided search criteria and user's email.
  */
 export const GET = async (req: NextRequest) => {
@@ -83,7 +80,7 @@ export const GET = async (req: NextRequest) => {
     );
   }
 };
-=======
+
  * 
  * Fetches titles based on provided filters
  * @param req NextRequest object containing query parameters
@@ -143,4 +140,4 @@ export const GET = auth(async (req: NextRequest) => {
     );
   }
 });
->>>>>>> 25e2ed2 (still not able to load images)
+

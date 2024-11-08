@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 'use client';
 import { useState, useEffect } from 'react';
 
@@ -48,4 +47,3 @@ const ActivityFeed: React.FC = () => {
 };
 
 export default ActivityFeed;
->>>>>>> 25e2ed2 (still not able to load images)

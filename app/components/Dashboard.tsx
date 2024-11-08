@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 'use client';
 
 import Link from 'next/link';
@@ -53,4 +52,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
->>>>>>> 25e2ed2 (still not able to load images)
+

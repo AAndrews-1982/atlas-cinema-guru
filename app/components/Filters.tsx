@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -139,4 +138,3 @@ const Filters: React.FC<FiltersProps> = ({ onFiltersChange }) => {
 };
 
 export default Filters;
->>>>>>> 25e2ed2 (still not able to load images)

@@ -1,13 +1,8 @@
 {
   "pages": {
     "/page": [
-      "static/chunks/app_global_d684f9.css",
-      "static/chunks/node_modules_a61fb0._.js",
-      "static/chunks/app_layout_tsx_83fc40._.js",
+      "static/chunks/_1b177b._.js",
       "static/chunks/app_layout_tsx_26a473._.js",
-      "static/chunks/node_modules_3203c0._.js",
-      "static/chunks/app_84bd2b._.js",
-      "static/chunks/app_page_tsx_f9012a._.js",
       "static/chunks/node_modules_next_dist_compiled_react-dom_1f56dc._.js",
       "static/chunks/node_modules_next_dist_compiled_107ce8._.js",
       "static/chunks/node_modules_next_dist_client_23b1be._.js",

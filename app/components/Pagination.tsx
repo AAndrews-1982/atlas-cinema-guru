@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 'use client';
 
 interface PaginationProps {
@@ -100,4 +98,4 @@ const Pagination: React.FC<PaginationProps> = ({
 };
 
 export default Pagination;
->>>>>>> 25e2ed2 (still not able to load images)
+

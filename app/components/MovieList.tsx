@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 'use client';
 
 import MovieCard from './MovieCard';
@@ -67,4 +65,4 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
 };
 
 export default MovieList;
->>>>>>> 25e2ed2 (still not able to load images)
+

@@ -1,11 +1,7 @@
-<<<<<<< HEAD
 // components/Header.tsx
 import { signOut, useSession } from "next-auth/react";
-=======
->>>>>>> 25e2ed2 (still not able to load images)
 import { FiLogOut } from "react-icons/fi";
 
-<<<<<<< HEAD
 const Header = () => {
   const { data: session, status } = useSession();
 
@@ -36,7 +32,7 @@ const Header = () => {
           <span>Loading...</span>
         )}
       </div>
-=======
+
 // SVG Components
 const CinemaIcon = () => (
   <svg 
@@ -95,7 +91,6 @@ const Header = async () => {
       ) : (
         <span aria-live="polite">Loading...</span>
       )}
->>>>>>> 25e2ed2 (still not able to load images)
     </header>
   );
 };

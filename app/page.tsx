@@ -14,20 +14,17 @@ interface Movie {
   coverArtUrl: string;
 }
 
-<<<<<<< HEAD
 export default function HomePage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-=======
+
 const ITEMS_PER_PAGE = 9;
 
 export default function Page() {
->>>>>>> 25e2ed2 (still not able to load images)
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-<<<<<<< HEAD
   const itemsPerPage = 9;
 
   // Redirect unauthenticated users
@@ -64,7 +61,6 @@ export default function Page() {
       fetchAllMovies();
     }
   }, [status]);
-=======
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -92,7 +88,6 @@ export default function Page() {
 
     fetchMovies();
   }, []);
->>>>>>> 25e2ed2 (still not able to load images)
 
   const applyFilters = (filters: { search: string; minYear: string; maxYear: string; genres: string[] }) => {
     const { search, minYear, maxYear, genres } = filters;
@@ -113,7 +108,6 @@ export default function Page() {
       filtered = filtered.filter(movie => genres.includes(movie.genre));
     }
 
-<<<<<<< HEAD
     if (filters.maxYear) {
       filtered = filtered.filter(movie => movie.released <= parseInt(filters.maxYear));
     }
@@ -133,11 +127,9 @@ export default function Page() {
   // Handle page change
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
-=======
     setFilteredMovies(filtered);
     setTotalPages(Math.ceil(filtered.length / ITEMS_PER_PAGE));
     setCurrentPage(1);
->>>>>>> 25e2ed2 (still not able to load images)
   };
 
   if (status === 'loading') {
@@ -150,7 +142,6 @@ export default function Page() {
 
   return (
     <>
-<<<<<<< HEAD
       <Header user={session.user} />
       <main className="p-6">
         <h1>Welcome to Cinema Guru, {session.user?.email}</h1>
@@ -163,11 +154,9 @@ export default function Page() {
         {/* Pagination */}
         <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
       </main>
-=======
       <Filters onFiltersChange={applyFilters} />
       <MovieList movies={filteredMovies.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)} />
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
->>>>>>> 25e2ed2 (still not able to load images)
     </>
   );
 }

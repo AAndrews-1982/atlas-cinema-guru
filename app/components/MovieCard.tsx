@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 'use client';
 
 import Image from 'next/image';
@@ -156,4 +154,3 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, toggleFavorite, toggleWatc
 };
 
 export default MovieCard;
->>>>>>> 25e2ed2 (still not able to load images)

@@ -1,12 +1,10 @@
-<<<<<<< HEAD
 import { deleteWatchLater, insertWatchLater, watchLaterExists } from "@/lib/data";
-=======
 import {
   deleteWatchLater,
   insertWatchLater,
   watchLaterExists,
 } from "@/lib/data";
->>>>>>> 25e2ed2 (still not able to load images)
+
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "next-auth/react"; // Use getSession for better integration with NextAuth
 
@@ -17,7 +15,7 @@ function getIdFromPath(url: string): string | null {
   return url.split('/').pop() ?? null;
 }
 
-<<<<<<< HEAD
+
 /**
  * POST /api/watch-later/:id
  * Adds an item to the user's watch-later list if it's not already added.
@@ -27,7 +25,7 @@ export const POST = async (req: NextRequest) => {
 
   if (!session?.user?.email) {
     return NextResponse.json({ error: "Unauthorized - Not logged in" }, { status: 401 });
-=======
+
 export const GET = auth(
   //@ts-ignore
   async (req: NextRequest, { params }: { params: { id: string } }) => {
@@ -52,7 +50,7 @@ export const GET = auth(
 
     await insertWatchLater(id, email);
     return NextResponse.json({ message: "Watch Later Added" });
->>>>>>> 25e2ed2 (still not able to load images)
+
   }
 
   const id = getIdFromPath(req.nextUrl.pathname);
@@ -76,7 +74,7 @@ export const GET = auth(
   }
 };
 
-<<<<<<< HEAD
+
 /**
  * DELETE /api/watch-later/:id
  * Removes an item from the user's watch-later list.
@@ -103,7 +101,7 @@ export const DELETE = async (req: NextRequest) => {
     return NextResponse.json({ error: "Failed to remove watch-later" }, { status: 500 });
   }
 };
-=======
+
 export const DELETE = auth(
   //@ts-ignore
   async (req: NextRequest, { params }: { params: { id: string } }) => {
@@ -117,4 +115,3 @@ export const DELETE = auth(
     return NextResponse.json({ message: "Watch Later removed" });
   }
 );
->>>>>>> 25e2ed2 (still not able to load images)
