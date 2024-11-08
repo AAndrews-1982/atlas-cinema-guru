@@ -1,3 +1,10 @@
 {
-  "/page": "app/page.js"
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/page": "app/page.js",
+  "/api/titles/route": "app/api/titles/route.js",
+  "/api/genres/route": "app/api/genres/route.js",
+  "/favorites/page": "app/favorites/page.js",
+  "/api/favorites/route": "app/api/favorites/route.js",
+  "/watch-later/page": "app/watch-later/page.js",
+  "/api/watch-later/route": "app/api/watch-later/route.js"
 }

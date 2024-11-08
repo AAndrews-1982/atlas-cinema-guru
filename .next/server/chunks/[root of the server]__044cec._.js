@@ -170,12 +170,14 @@ __turbopack_esm__({
     "fetchGenres": (()=>fetchGenres),
     "fetchTitles": (()=>fetchTitles),
     "fetchWatchLaters": (()=>fetchWatchLaters),
-    "insertActivity": (()=>insertActivity),
     "insertFavorite": (()=>insertFavorite),
     "insertWatchLater": (()=>insertWatchLater),
     "watchLaterExists": (()=>watchLaterExists)
 });
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$vercel$2f$postgres$2f$dist$2f$index$2d$node$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$module__evaluation$3e$__ = __turbopack_import__("[project]/node_modules/@vercel/postgres/dist/index-node.js [app-route] (ecmascript) <module evaluation>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/lib/db.ts [app-route] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$vercel$2f$postgres$2f$dist$2f$chunk$2d$7IR77QAQ$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_import__("[project]/node_modules/@vercel/postgres/dist/chunk-7IR77QAQ.js [app-route] (ecmascript) <locals>");
+;
 ;
 async function fetchTitles(page, minYear, maxYear, query, genres, userEmail) {
     try {
@@ -183,25 +185,8 @@ async function fetchTitles(page, minYear, maxYear, query, genres, userEmail) {
         const favorites = (await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"].selectFrom("favorites").select("title_id").where("user_id", "=", userEmail).execute()).map((row)=>row.title_id);
         // Get watch later title ids
         const watchLater = (await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"].selectFrom("watchlater").select("title_id").where("user_id", "=", userEmail).execute()).map((row)=>row.title_id);
-        // Build the query
-        let queryBuilder = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"].selectFrom("titles").selectAll("titles").orderBy("titles.title", "asc");
-        // .limit(6)
-        // .offset((page - 1) * 6);
-        // Only apply filters if they exist
-        if (minYear && Number(minYear) > 0) {
-            queryBuilder = queryBuilder.where("titles.released", ">=", Number(minYear));
-        }
-        if (maxYear && Number(maxYear) <= new Date().getFullYear()) {
-            queryBuilder = queryBuilder.where("titles.released", "<=", Number(maxYear));
-        }
-        if (query) {
-            queryBuilder = queryBuilder.where("titles.title", "ilike", `%${query}%`);
-        }
-        if (genres.length > 0) {
-            queryBuilder = queryBuilder.where("titles.genre", "in", genres);
-        }
-        // Fetch the titles
-        const titles = await queryBuilder.execute();
+        //Fetch titles
+        const titles = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"].selectFrom("titles").selectAll("titles").where("titles.released", ">=", minYear).where("titles.released", "<=", maxYear).where("titles.title", "ilike", `%${query}%`).where("titles.genre", "in", genres).orderBy("titles.title", "asc").limit(6).offset((page - 1) * 6).execute();
         return titles.map((row)=>({
                 ...row,
                 favorited: favorites.includes(row.id),
@@ -210,7 +195,7 @@ async function fetchTitles(page, minYear, maxYear, query, genres, userEmail) {
             }));
     } catch (error) {
         console.error("Database Error:", error);
-        throw new Error("Failed to fetch titles.");
+        throw new Error("Failed to fetch topics.");
     }
 }
 async function fetchFavorites(page, userEmail) {
@@ -230,16 +215,9 @@ async function fetchFavorites(page, userEmail) {
 }
 async function insertFavorite(title_id, userEmail) {
     try {
-        // Ensure the query is correct and using the right SQL syntax
-        await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"].insertInto("favorites").values({
-            title_id,
-            user_id: userEmail
-        }).execute();
-        // Optionally log or return a success message
-        await insertActivity(title_id, userEmail, "FAVORITED");
-        return {
-            message: "Favorite Added"
-        };
+        const data = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$vercel$2f$postgres$2f$dist$2f$chunk$2d$7IR77QAQ$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["sql"]`INSERT INTO favorites (title_id, user_id) VALUES (${title_id}, ${userEmail})`;
+        insertActivity(title_id, userEmail, "FAVORITED");
+        return data.rows;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to add favorite.");
@@ -247,16 +225,8 @@ async function insertFavorite(title_id, userEmail) {
 }
 async function deleteFavorite(title_id, userEmail) {
     try {
-        // Attempt to delete the favorite and return affected rows if supported
-        const result = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"].deleteFrom("favorites").where("title_id", "=", title_id).where("user_id", "=", userEmail).returning([
-            "title_id"
-        ]) // This depends on your DB/library, use it if available
-        .execute();
-        if (result.length === 0) {
-            // No rows were affected, meaning the favorite didn't exist or wasn't deleted
-            throw new Error("Favorite not found or already removed");
-        }
-        return result;
+        const data = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$vercel$2f$postgres$2f$dist$2f$chunk$2d$7IR77QAQ$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["sql"]`DELETE FROM favorites WHERE title_id = ${title_id} AND user_id = ${userEmail}`;
+        return data.rows;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to delete favorite.");
@@ -264,8 +234,8 @@ async function deleteFavorite(title_id, userEmail) {
 }
 async function favoriteExists(title_id, userEmail) {
     try {
-        const data = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"].selectFrom("favorites").select("title_id").where("title_id", "=", title_id).where("user_id", "=", userEmail).execute();
-        return data.length > 0;
+        const data = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$vercel$2f$postgres$2f$dist$2f$chunk$2d$7IR77QAQ$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["sql"]`SELECT * FROM favorites WHERE title_id = ${title_id} AND user_id = ${userEmail}`;
+        return data.rows.length > 0;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch favorite.");
@@ -288,53 +258,38 @@ async function fetchWatchLaters(page, userEmail) {
 }
 async function insertWatchLater(title_id, userEmail) {
     try {
-        // Ensure the query is correct and using the right SQL syntax
-        await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"].insertInto("watchlater").values({
-            title_id,
-            user_id: userEmail
-        }).execute();
-        // Optionally log or return a success message
-        await insertActivity(title_id, userEmail, "WATCH_LATER");
-        return {
-            message: "WATCH LATER Added"
-        };
+        const data = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$vercel$2f$postgres$2f$dist$2f$chunk$2d$7IR77QAQ$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["sql"]`INSERT INTO watchLater (title_id, user_id) VALUES (${title_id}, ${userEmail})`;
+        insertActivity(title_id, userEmail, "WATCH_LATER");
+        return data.rows;
     } catch (error) {
         console.error("Database Error:", error);
-        throw new Error("Failed to add watch later.");
+        throw new Error("Failed to add watchLater.");
     }
 }
 async function deleteWatchLater(title_id, userEmail) {
     try {
-        const result = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"].deleteFrom("watchlater").where("title_id", "=", title_id).where("user_id", "=", userEmail).returning([
-            "title_id"
-        ]).execute();
-        if (result.length === 0) {
-            // No rows were affected, meaning the favorite didn't exist or wasn't deleted
-            throw new Error("Watch-later not found or already removed");
-        }
-        return result;
+        const data = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$vercel$2f$postgres$2f$dist$2f$chunk$2d$7IR77QAQ$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["sql"]`DELETE FROM watchLater WHERE title_id = ${title_id} AND user_id = ${userEmail}`;
+        return data.rows;
     } catch (error) {
         console.error("Database Error:", error);
-        throw new Error("Failed to delete watch-later");
+        throw new Error("Failed to add watchLater.");
     }
 }
 async function watchLaterExists(title_id, userEmail) {
     try {
-        const data = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"].selectFrom('watchlater').select('title_id').where('title_id', '=', title_id).where('user_id', '=', userEmail).execute();
-        return data.length > 0;
+        const data = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$vercel$2f$postgres$2f$dist$2f$chunk$2d$7IR77QAQ$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["sql"]`SELECT * FROM watchLater WHERE title_id = ${title_id} AND user_id = ${userEmail}`;
+        return data.rows.length > 0;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch watchLater.");
     }
 }
 async function fetchGenres() {
-    try {
-        const data = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"].selectFrom("titles").distinct().select("titles.genre").execute();
-        return data.map((row)=>row.genre);
-    } catch (error) {
-        console.error("Error fetching genres from database:", error);
-        throw new Error("Failed to fetch genres.");
-    }
+    const data = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$vercel$2f$postgres$2f$dist$2f$chunk$2d$7IR77QAQ$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["sql"]`
+        SELECT DISTINCT titles.genre
+        FROM titles;
+      `;
+    return data.rows.map((row)=>row.genre);
 }
 async function fetchActivities(page, userEmail) {
     try {
@@ -352,16 +307,8 @@ async function fetchActivities(page, userEmail) {
 }
 async function insertActivity(title_id, userEmail, activity) {
     try {
-        // Insert the activity into the "activities" table
-        await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"].insertInto("activities").values({
-            title_id,
-            user_id: userEmail,
-            activity,
-            timestamp: new Date()
-        }).execute();
-        return {
-            message: "Activity Logged"
-        };
+        const data = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$vercel$2f$postgres$2f$dist$2f$chunk$2d$7IR77QAQ$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["sql"]`INSERT INTO activities (title_id, user_id, activity) VALUES (${title_id}, ${userEmail}, ${activity})`;
+        return data.rows;
     } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to add activity.");

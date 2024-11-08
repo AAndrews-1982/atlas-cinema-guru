@@ -1,39 +1,9 @@
-// components/Header.tsx
+'use client';
+
 import { signOut, useSession } from "next-auth/react";
 import { FiLogOut } from "react-icons/fi";
 
-const Header = () => {
-  const { data: session, status } = useSession();
-
-  return (
-    <header className="bg-teal-500 h-20 w-full flex justify-between items-center px-6 text-white">
-      {/* Left side: Logo and Title */}
-      <div className="flex items-center space-x-4">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="h-6 w-6">
-          {/* SVG content omitted for brevity */}
-        </svg>
-        <h1 className="text-xl font-bold">Cinema Guru</h1>
-      </div>
-
-      {/* Right side: Welcome message and Logout */}
-      <div className="flex items-center space-x-4">
-        {status === 'authenticated' ? (
-          <>
-            <span>Welcome, {session.user.name ?? session.user.email}</span>
-            <button
-              onClick={() => signOut()}
-              className="flex items-center space-x-2 bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
-            >
-              <FiLogOut className="h-5 w-5" />
-              <span>Logout</span>
-            </button>
-          </>
-        ) : (
-          <span>Loading...</span>
-        )}
-      </div>
-
-// SVG Components
+// Icon Component
 const CinemaIcon = () => (
   <svg 
     xmlns="http://www.w3.org/2000/svg" 
@@ -41,7 +11,7 @@ const CinemaIcon = () => (
     viewBox="0 0 24 24" 
     strokeWidth="1.5" 
     stroke="currentColor" 
-    className="size-6"
+    className="h-6 w-6"
   >
     <path 
       strokeLinecap="round" 
@@ -51,7 +21,7 @@ const CinemaIcon = () => (
   </svg>
 );
 
-// Components
+// Header Components
 const Logo = () => (
   <div className="flex items-center">
     <CinemaIcon />
@@ -60,16 +30,14 @@ const Logo = () => (
 );
 
 const LogoutButton = () => (
-  <form action={async () => { 'use server'; await signOut() }}>
-    <button
-      type='submit'
-      className="flex items-center space-x-2 text-blue-500 hover:text-blue-700 transition"
-      aria-label="Sign out"
-    >
-      <FiLogOut className="h-5 w-5" />
-      <span className='hidden sm:inline'>Logout</span>
-    </button>
-  </form>
+  <button
+    onClick={() => signOut()}
+    className="flex items-center space-x-2 text-blue-500 hover:text-blue-700 transition"
+    aria-label="Sign out"
+  >
+    <FiLogOut className="h-5 w-5" />
+    <span className="hidden sm:inline">Logout</span>
+  </button>
 );
 
 const UserSection = ({ user }: { user: any }) => (
@@ -79,17 +47,16 @@ const UserSection = ({ user }: { user: any }) => (
   </div>
 );
 
-const Header = async () => {
-  const session = await auth();
+const Header = () => {
+  const { data: session, status } = useSession();
 
   return (
-    <header className="bg-tealBright h-[8dvh] w-full flex items-center justify-between px-6 text-blue">
+    <header className="bg-teal-500 h-20 w-full flex justify-between items-center px-6 text-white">
       <Logo />
-      
-      {session?.user ? (
-        <UserSection user={session.user} />
+      {status === "authenticated" ? (
+        <UserSection user={session?.user} />
       ) : (
-        <span aria-live="polite">Loading...</span>
+        <span>Loading...</span>
       )}
     </header>
   );

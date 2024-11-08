@@ -1,7 +1,8 @@
+"use client";
+
 import { useState, useEffect, FC } from 'react';
 import Link from 'next/link';
 import { FiHome, FiStar, FiClock } from 'react-icons/fi';
-
 
 interface SidebarProps {
   activities: Activity[];
@@ -27,9 +28,18 @@ const Sidebar: FC<SidebarProps> = ({ activities }) => {
       onMouseEnter={() => !isMobile && setIsExpanded(true)}
       onMouseLeave={() => !isMobile && setIsExpanded(false)}
     >
-      <Link href="/"><a className="link"><FiHome /><span>{(isExpanded || isMobile) && 'Home'}</span></a></Link>
-      <Link href="/favorites"><a className="link"><FiStar /><span>{(isExpanded || isMobile) && 'Favorites'}</span></a></Link>
-      <Link href="/watch-later"><a className="link"><FiClock /><span>{(isExpanded || isMobile) && 'Watch Later'}</span></a></Link>
+      <Link href="/" className="link">
+        <FiHome />
+        <span>{(isExpanded || isMobile) && 'Home'}</span>
+      </Link>
+      <Link href="/favorites" className="link">
+        <FiStar />
+        <span>{(isExpanded || isMobile) && 'Favorites'}</span>
+      </Link>
+      <Link href="/watch-later" className="link">
+        <FiClock />
+        <span>{(isExpanded || isMobile) && 'Watch Later'}</span>
+      </Link>
       {isExpanded && <ActivityFeed activities={activities} />}
     </aside>
   );

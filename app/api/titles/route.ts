@@ -1,5 +1,4 @@
-import { getSession } from "next-auth/react"; // Use getSession for authentication
-import { auth } from "@/auth";
+import { getSession } from "next-auth/react";
 import { fetchGenres, fetchTitles } from "@/lib/data";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -18,7 +17,7 @@ const CURRENT_YEAR = new Date().getFullYear();
 // Utility functions
 const parseQueryParams = async (params: URLSearchParams): Promise<TitlesQueryParams> => {
   const defaultGenres = await fetchGenres();
-  
+
   return {
     page: params.get("page") ? Number(params.get("page")) : 1,
     minYear: params.get("minYear") ? Number(params.get("minYear")) : 0,
@@ -32,84 +31,45 @@ const validateParams = (params: TitlesQueryParams): { isValid: boolean; error?: 
   if (isNaN(params.page) || params.page < 1) {
     return { isValid: false, error: "Invalid page number" };
   }
-  
+
   if (isNaN(params.minYear) || params.minYear < 0) {
     return { isValid: false, error: "Invalid minimum year" };
   }
-  
+
   if (isNaN(params.maxYear) || params.maxYear > CURRENT_YEAR) {
     return { isValid: false, error: "Invalid maximum year" };
   }
-  
+
   if (params.minYear > params.maxYear) {
     return { isValid: false, error: "Minimum year cannot be greater than maximum year" };
   }
-  
+
   return { isValid: true };
 };
 
 /**
  * GET /api/titles
-
  * Retrieves a list of titles based on the provided search criteria and user's email.
+ * @param req - NextRequest object containing query parameters
+ * @returns JSON response with titles or error message
  */
 export const GET = async (req: NextRequest) => {
+  // Authenticate user
   const session = await getSession({ req });
   if (!session?.user?.email) {
     return NextResponse.redirect(new URL('/401', req.url), 401);
   }
 
-  const email = session.user.email;
-  const params = req.nextUrl.searchParams;
-
-  // More explicit handling of default values
-  const page = parseInt(params.get("page") ?? "1");
-  const minYear = parseInt(params.get("minYear") ?? "0");
-  const maxYear = parseInt(params.get("maxYear") ?? `${new Date().getFullYear()}`);
-  const query = params.get("query") ?? "";
-  const genres = params.get("genres") ? params.get("genres").split(",") : await fetchGenres(); // Fetch default genres if not specified
-
   try {
-    const titles = await fetchTitles(page, minYear, maxYear, query, genres, email);
-    return NextResponse.json({ titles });
-  } catch (error) {
-    console.error("Error fetching titles:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch titles due to a server error." },
-      { status: 500 }
-    );
-  }
-};
-
- * 
- * Fetches titles based on provided filters
- * @param req NextRequest object containing query parameters
- * @returns JSON response with titles or error message
- */
-export const GET = auth(async (req: NextRequest) => {
-  // Auth check
-  const session = req.auth;
-  if (!session) {
-    return NextResponse.json(
-      { error: "Unauthorized - Not logged in" },
-      { status: 401 }
-    );
-  }
-
-  try {
-    // Parse query parameters
+    // Parse and validate query parameters
     const params = await parseQueryParams(req.nextUrl.searchParams);
-    
-    // Validate parameters
     const validation = validateParams(params);
+
     if (!validation.isValid) {
-      return NextResponse.json(
-        { error: validation.error },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
-    // Fetch titles
+    // Fetch titles based on validated parameters and user email
     const titles = await fetchTitles(
       params.page,
       params.minYear,
@@ -120,7 +80,7 @@ export const GET = auth(async (req: NextRequest) => {
     );
 
     return NextResponse.json({ 
-      title: titles,
+      titles,
       metadata: {
         page: params.page,
         filters: {
@@ -133,11 +93,10 @@ export const GET = auth(async (req: NextRequest) => {
     });
 
   } catch (error) {
-    console.error('Error fetching titles:', error);
+    console.error("Error fetching titles:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
     );
   }
-});
-
+};

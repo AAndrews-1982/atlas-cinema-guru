@@ -1,53 +1,28 @@
 import { deleteFavorite, favoriteExists, insertFavorite } from "@/lib/data";
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "next-auth/react"; // Using getSession for clearer authentication handling
+import { getSession } from "next-auth/react";
 
-
-// Simplified authentication check function
-async function checkAuth(request: NextRequest) {
+// Authentication check function
+async function checkAuth(request: NextRequest): Promise<string> {
   const session = await getSession({ req: request });
   if (!session?.user?.email) {
     throw new Error("Unauthorized - Not logged in");
-
-/**
- * POST /api/favorites/:id
- */
-export const POST = auth(
-  //@ts-ignore
-  async (req: NextRequest, { params }: { params: { id: string } }) => {
-    const { id } = params;
-
-    //@ts-ignore
-    if (!req.auth) {
-      return NextResponse.json(
-        { error: "Unauthorized - Not logged in" },
-        { status: 401 }
-      );
-    }
-
-    const {
-      user: { email }, //@ts-ignore
-    } = req.auth;
-
-    const exists = await favoriteExists(id, email);
-    if (exists) {
-      return NextResponse.json({ message: "Already favorited" });
-    }
-
-    await insertFavorite(id, email);
-    return NextResponse.json({ message: "Favorite Added" });
-
   }
   return session.user.email;
 }
 
-
-// Encapsulate repetitive response generation in a function
+// Helper function for creating JSON responses
 function createResponse(content: Object, status: number = 200) {
   return NextResponse.json(content, { status });
 }
 
-export async function POST(request: NextRequest, { params: { id } }: { params: { id: string } }) {
+/**
+ * POST /api/favorites/:id
+ * Adds a favorite item for the authenticated user.
+ */
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = params;
+
   try {
     const email = await checkAuth(request);
 
@@ -63,7 +38,13 @@ export async function POST(request: NextRequest, { params: { id } }: { params: {
   }
 }
 
-export async function DELETE(request: NextRequest, { params: { id } }: { params: { id: string } }) {
+/**
+ * DELETE /api/favorites/:id
+ * Removes a favorite item for the authenticated user.
+ */
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = params;
+
   try {
     const email = await checkAuth(request);
 
@@ -74,20 +55,3 @@ export async function DELETE(request: NextRequest, { params: { id } }: { params:
     return createResponse({ error: "Failed to remove favorite" }, 500);
   }
 }
-
-/**
- * DELETE /api/favorites/:id
- */
-export const DELETE = auth(
-  //@ts-ignore
-  async (req: NextRequest, { params }: { params: { id: string } }) => {
-    const { id } = params;
-
-    const {
-      user: { email }, //@ts-ignore
-    } = req.auth;
-
-    await deleteFavorite(id, email);
-    return NextResponse.json({ message: "Favorite removed" });
-  }
-);

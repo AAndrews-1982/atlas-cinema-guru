@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 97, "column": 0}, "map": {"version":3,"sources":["turbopack://[project]/app/api/auth/[...nextauth]/route.ts"],"sourcesContent":["import { handlers } from \"@/auth\"\nexport const { GET, POST } = handlers"],"names":[],"mappings":";;;;AAAA;;AACO,MAAM,EAAE,GAAG,EAAE,IAAI,EAAE,GAAG,sGAAA,CAAA,WAAQ"}},
-    {"offset": {"line": 104, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
-}

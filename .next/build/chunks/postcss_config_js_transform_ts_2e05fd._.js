@@ -7,7 +7,7 @@ var { r: __turbopack_require__, f: __turbopack_module_context__, i: __turbopack_
 __turbopack_export_value__((__turbopack_import__) => {
     return Promise.all([
   "build/chunks/node_modules_b5d1de._.js",
-  "build/chunks/[root of the server]__5bf046._.js"
+  "build/chunks/[root of the server]__a84f30._.js"
 ].map((chunk) => __turbopack_load__(chunk))).then(() => {
         return __turbopack_import__("[project]/postcss.config.js/transform.ts { CONFIG => \"[project]/postcss.config.js_.loader.mjs [postcss] (ecmascript)\" } [postcss] (ecmascript)");
     });

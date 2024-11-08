@@ -1,13 +1,4 @@
 {
-  "node": {
-    "40706f9a703b87a85013d1ce9ba2ea164b3a661b": {
-      "workers": {
-        "app/favorites/page": "[project]/.next-internal/server/app/favorites/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/components/Header.tsx [app-rsc] (ecmascript)\" } [app-rsc] (ecmascript)"
-      },
-      "layer": {
-        "app/favorites/page": "rsc"
-      }
-    }
-  },
+  "node": {},
   "edge": {}
 }

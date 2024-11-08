@@ -91,36 +91,44 @@ const MovieCard = ({ movie, toggleFavorite, toggleWatchLater })=>{
     const [isWatchLater, setIsWatchLater] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(movie.watchLater || false);
     const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     // Sync with prop changes
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        setIsFavorited(movie.favorited || false);
-        setIsWatchLater(movie.watchLater || false);
-    }, [
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "MovieCard.useEffect": ()=>{
+            setIsFavorited(movie.favorited || false);
+            setIsWatchLater(movie.watchLater || false);
+        }
+    }["MovieCard.useEffect"], [
         movie.favorited,
         movie.watchLater
     ]);
     // Event handlers
-    const handleStatusUpdate = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])(async (endpoint, currentStatus, setStatus, callback)=>{
-        if (isLoading) return;
-        setIsLoading(true);
-        try {
-            await updateMovieStatus(endpoint, movie.id, currentStatus ? 'DELETE' : 'POST');
-            setStatus(!currentStatus);
-            if (callback) callback(movie.id);
-        } catch (error) {
-            console.error(`Error updating ${endpoint}:`, error);
-        } finally{
-            setIsLoading(false);
+    const handleStatusUpdate = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "MovieCard.useCallback[handleStatusUpdate]": async (endpoint, currentStatus, setStatus, callback)=>{
+            if (isLoading) return;
+            setIsLoading(true);
+            try {
+                await updateMovieStatus(endpoint, movie.id, currentStatus ? 'DELETE' : 'POST');
+                setStatus(!currentStatus);
+                if (callback) callback(movie.id);
+            } catch (error) {
+                console.error(`Error updating ${endpoint}:`, error);
+            } finally{
+                setIsLoading(false);
+            }
         }
-    }, [
+    }["MovieCard.useCallback[handleStatusUpdate]"], [
         isLoading,
         movie.id
     ]);
-    const handleFavoriteToggle = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])(()=>handleStatusUpdate('favorites', isFavorited, setIsFavorited, toggleFavorite), [
+    const handleFavoriteToggle = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "MovieCard.useCallback[handleFavoriteToggle]": ()=>handleStatusUpdate('favorites', isFavorited, setIsFavorited, toggleFavorite)
+    }["MovieCard.useCallback[handleFavoriteToggle]"], [
         handleStatusUpdate,
         isFavorited,
         toggleFavorite
     ]);
-    const handleWatchLaterToggle = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])(()=>handleStatusUpdate('watch-later', isWatchLater, setIsWatchLater, toggleWatchLater), [
+    const handleWatchLaterToggle = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "MovieCard.useCallback[handleWatchLaterToggle]": ()=>handleStatusUpdate('watch-later', isWatchLater, setIsWatchLater, toggleWatchLater)
+    }["MovieCard.useCallback[handleWatchLaterToggle]"], [
         handleStatusUpdate,
         isWatchLater,
         toggleWatchLater
@@ -462,9 +470,11 @@ function WatchLaterPage() {
             console.error('Error fetching watch later movies:', error);
         }
     };
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        fetchWatchLaterMovies(currentPage); // Fetch movies when the page changes
-    }, [
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "WatchLaterPage.useEffect": ()=>{
+            fetchWatchLaterMovies(currentPage); // Fetch movies when the page changes
+        }
+    }["WatchLaterPage.useEffect"], [
         currentPage
     ]);
     // Handle page change
@@ -1105,41 +1115,53 @@ function SideEffect(props) {
         headManager == null ? void 0 : (_headManager_mountedInstances = headManager.mountedInstances) == null ? void 0 : _headManager_mountedInstances.add(props.children);
         emitChange();
     }
-    useClientOnlyLayoutEffect(()=>{
-        var _headManager_mountedInstances;
-        headManager == null ? void 0 : (_headManager_mountedInstances = headManager.mountedInstances) == null ? void 0 : _headManager_mountedInstances.add(props.children);
-        return ()=>{
+    useClientOnlyLayoutEffect({
+        "SideEffect.useClientOnlyLayoutEffect": ()=>{
             var _headManager_mountedInstances;
-            headManager == null ? void 0 : (_headManager_mountedInstances = headManager.mountedInstances) == null ? void 0 : _headManager_mountedInstances.delete(props.children);
-        };
-    });
+            headManager == null ? void 0 : (_headManager_mountedInstances = headManager.mountedInstances) == null ? void 0 : _headManager_mountedInstances.add(props.children);
+            return ({
+                "SideEffect.useClientOnlyLayoutEffect": ()=>{
+                    var _headManager_mountedInstances;
+                    headManager == null ? void 0 : (_headManager_mountedInstances = headManager.mountedInstances) == null ? void 0 : _headManager_mountedInstances.delete(props.children);
+                }
+            })["SideEffect.useClientOnlyLayoutEffect"];
+        }
+    }["SideEffect.useClientOnlyLayoutEffect"]);
     // We need to call `updateHead` method whenever the `SideEffect` is trigger in all
     // life-cycles: mount, update, unmount. However, if there are multiple `SideEffect`s
     // being rendered, we only trigger the method from the last one.
     // This is ensured by keeping the last unflushed `updateHead` in the `_pendingUpdate`
     // singleton in the layout effect pass, and actually trigger it in the effect pass.
-    useClientOnlyLayoutEffect(()=>{
-        if (headManager) {
-            headManager._pendingUpdate = emitChange;
-        }
-        return ()=>{
+    useClientOnlyLayoutEffect({
+        "SideEffect.useClientOnlyLayoutEffect": ()=>{
             if (headManager) {
                 headManager._pendingUpdate = emitChange;
             }
-        };
-    });
-    useClientOnlyEffect(()=>{
-        if (headManager && headManager._pendingUpdate) {
-            headManager._pendingUpdate();
-            headManager._pendingUpdate = null;
+            return ({
+                "SideEffect.useClientOnlyLayoutEffect": ()=>{
+                    if (headManager) {
+                        headManager._pendingUpdate = emitChange;
+                    }
+                }
+            })["SideEffect.useClientOnlyLayoutEffect"];
         }
-        return ()=>{
+    }["SideEffect.useClientOnlyLayoutEffect"]);
+    useClientOnlyEffect({
+        "SideEffect.useClientOnlyEffect": ()=>{
             if (headManager && headManager._pendingUpdate) {
                 headManager._pendingUpdate();
                 headManager._pendingUpdate = null;
             }
-        };
-    });
+            return ({
+                "SideEffect.useClientOnlyEffect": ()=>{
+                    if (headManager && headManager._pendingUpdate) {
+                        headManager._pendingUpdate();
+                        headManager._pendingUpdate = null;
+                    }
+                }
+            })["SideEffect.useClientOnlyEffect"];
+        }
+    }["SideEffect.useClientOnlyEffect"]);
     return null;
 } //# sourceMappingURL=side-effect.js.map
 }}),
