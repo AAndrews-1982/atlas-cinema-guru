@@ -24,6 +24,11 @@ export const GET = async (req: NextRequest) => {
   // Fetch favorites using the authenticated user's email
   const favorites = await fetchFavorites(page, session.user.email);
 
+<<<<<<< HEAD
   // Return a structured JSON response with a standard HTTP status code
   return NextResponse.json({ favorites }, { status: 200 });
 };
+=======
+  return NextResponse.json({ favorites });
+});
+>>>>>>> 25e2ed2 (still not able to load images)

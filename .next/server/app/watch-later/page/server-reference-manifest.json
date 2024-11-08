@@ -1,0 +1,13 @@
+{
+  "node": {
+    "40706f9a703b87a85013d1ce9ba2ea164b3a661b": {
+      "workers": {
+        "app/watch-later/page": "[project]/.next-internal/server/app/watch-later/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/components/Header.tsx [app-rsc] (ecmascript)\" } [app-rsc] (ecmascript)"
+      },
+      "layer": {
+        "app/watch-later/page": "rsc"
+      }
+    }
+  },
+  "edge": {}
+}

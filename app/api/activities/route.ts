@@ -16,9 +16,15 @@ export const GET = async (req: NextRequest & { user?: { email: string } }): Prom
   // Simplify URL parameter access
   const page = parseInt(req.nextUrl.searchParams.get("page") || "1");
 
+<<<<<<< HEAD
   // Fetch activities based on user email
   const activities = await fetchActivities(page, session.user.email);
 
   // Utilize JSON helper for structured responses
   return NextResponse.json({ activities }, { status: 200 });
 };
+=======
+  const activities = await fetchActivities(page, email);
+  return NextResponse.json({ activities });
+});
+>>>>>>> 25e2ed2 (still not able to load images)

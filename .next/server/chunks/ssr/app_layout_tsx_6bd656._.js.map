@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["turbopack://[project]/app/layout.tsx"],"sourcesContent":["// app/homepage.tsx\nimport { SessionProvider } from \"next-auth/react\";\nimport { ReactNode } from \"react\";\nimport Header from \"./components/Header\";\nimport SidebarMenu from \"./components/Dashboard\";\nimport \"@/app/global.css\";\n\nexport default function MainLayout({ children }: { children: ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"h-full\">\n        <SessionProvider>\n          <Header />\n          <main className=\"flex flex-col md:flex-row bg-blue min-h-screen\">\n            <SidebarMenu />\n            <section className=\"flex-grow min-h-screen\">\n              {children}\n            </section>\n          </main>\n        </SessionProvider>\n      </body>\n    </html>\n  );\n}\n"],"names":[],"mappings":"AAAA,mBAAmB;;;;;AACnB;AAEA;AACA;;;;;;AAGe,SAAS,WAAW,EAAE,QAAQ,EAA2B;IACtE,qBACE,8OAAC;QAAK,MAAK;kBACT,cAAA,8OAAC;YAAK,WAAU;sBACd,cAAA,8OAAC,qIAAA,CAAA,kBAAe;;kCACd,8OAAC,4HAAA,CAAA,UAAM;;;;;kCACP,8OAAC;wBAAK,WAAU;;0CACd,8OAAC,+HAAA,CAAA,UAAW;;;;;0CACZ,8OAAC;gCAAQ,WAAU;0CAChB;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAOf"}},
+    {"offset": {"line": 71, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}
