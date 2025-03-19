@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 
 export const POST = auth(
   async (req: NextRequest, ctx: { params: { id: string } }) => {
-    const { id } = await ctx.params; // ✅ Ensure params is awaited
+    const { id } = await ctx.params; // Ensure params is awaited
 
     if (!id) {
       return NextResponse.json({ error: "Missing movie ID" }, { status: 400 });
@@ -31,7 +31,7 @@ export const POST = auth(
 
 export const DELETE = auth(
   async (req: NextRequest, ctx: { params: { id: string } }) => {
-    const { id } = await ctx.params; // ✅ Ensure params is awaited
+    const { id } = await ctx.params; // Ensure params is awaited
 
     if (!id) {
       return NextResponse.json({ error: "Missing movie ID" }, { status: 400 });

@@ -9,6 +9,13 @@ export const GET = auth(async (req: NextRequest) => {
   const params = req.nextUrl.searchParams;
   const page = params.get("page") ? Number(params.get("page")) : 1;
 
+  const session = await auth();
+  if (!session || !session.user?.email) {
+    return NextResponse.json(
+      { error: "Unauthorized - Not logged in" },
+      { status: 401 }
+    );
+  }
   //@ts-ignore
   if (!req.auth) {
     return NextResponse.json(

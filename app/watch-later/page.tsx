@@ -48,16 +48,19 @@ function WatchLaterPage() {
 
         const data = await response.json();
 
-        // Mark all movies as watchLater
-        const watchLaterMovies = (data.watchLater || []).map((movie: Movie) => ({
-          ...movie,
-          watchLater: true,
-        }));
+        // Ensure `data.watchLater` is always an array
+        const watchLaterMovies = Array.isArray(data.watchLater)
+        ? data.watchLater.map((movie: Movie) => ({
+            ...movie,
+            watchLater: true,
+          }))
+        : [];
 
         setMovies(watchLaterMovies);
         setTotalPages(Math.ceil((data.watchLater?.length || 0) / 6) || 1);
       } catch (error) {
         console.error("Error fetching watch later movies:", error);
+        setMovies([]); // Ensure an empty array is set if data is invalid
       } finally {
         setLoading(false);
       }

@@ -30,21 +30,20 @@ export default function GenreFilter({ onGenreSelect }: GenreFilterProps) {
   }, [selectedGenres, onGenreSelect]);
 
   return (
-    <div className="flex flex-1 flex-col p-0 max-w-md">
-      <div className="mb-3">
-          <h2>Genres</h2>
+    <div className="w-full lg:w-auto flex flex-col lg:ml-12 lg:-mt-2 lg:items-end">
+      <div className="text-lg text-white mb-1 lg:mb-2"><h2>Genres</h2>
       </div>
-      <div className="flex flex-wrap gap-2">
-        {genres.map((genre) => (
-                    <button
-                    key={genre}
-                    onClick={() => toggleGenre(genre)}
-                    className={`border-2 border-teal rounded-full p-1 ${selectedGenres.includes(genre) ? "bg-teal text-black" : "bg-navy"}`}
-                  >
-                    {genre}
-                  </button>
-        ))}
-      </div>
-    </div>
+      <div className="grid grid-cols-5 gap-2">
+  {genres.map((genre) => (
+    <button
+      key={genre}
+      onClick={() => toggleGenre(genre)}
+      className={`border-2 border-teal rounded-full px-3 py-1 text-sm ${selectedGenres.includes(genre) ? "bg-teal text-black" : "bg-navy"}`}
+    >
+      {genre}
+    </button>
+  ))}
+  </div>
+</div>
   );
 }

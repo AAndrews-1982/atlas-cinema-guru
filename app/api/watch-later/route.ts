@@ -1,4 +1,4 @@
-import { fetchWatchLaters, deleteWatchLater } from "@/lib/data";
+import { fetchWatchLaters } from "@/lib/data";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 
