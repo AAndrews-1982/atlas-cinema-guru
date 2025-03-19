@@ -1,21 +1,22 @@
-
 import { auth } from "@/auth";
 import { fetchGenres } from "@/lib/data";
-import { supabase } from "@/lib/db"; // Import Supabase
+import { supabase } from "@/lib/db"; // import Supabase
 import { NextRequest, NextResponse } from "next/server";
 
 /**
  * GET /api/titles
  */
-export const GET = auth(async (req: NextRequest) => {
-  if (!req.auth?.user) {
+export const GET = async (req: NextRequest) => {
+  const session = await auth(); // Use `auth()` to fetch user session
+  
+  if (!session?.user) {
     return NextResponse.json(
       { error: "Unauthorized - Not logged in" },
       { status: 401 }
     );
   }
 
-  const email = req.auth.user.email;
+  const email = session.user.email;
   const params = req.nextUrl.searchParams;
   const page = Number(params.get("page") ?? 1);
   const minYear = 2023;
@@ -39,7 +40,7 @@ export const GET = auth(async (req: NextRequest) => {
       supabaseQuery = supabaseQuery.in("genre", genres);
     }
 
-    // Pagination (10 results per page)
+    // Pagination (increase results per page if needed)
     const start = (page - 1) * 10;
     const end = start + 9;
     const { data, error } = await supabaseQuery.range(start, end);
@@ -51,4 +52,4 @@ export const GET = auth(async (req: NextRequest) => {
     console.error("Error fetching titles:", error);
     return NextResponse.json({ error: "Failed to fetch titles" }, { status: 500 });
   }
-});
+};
