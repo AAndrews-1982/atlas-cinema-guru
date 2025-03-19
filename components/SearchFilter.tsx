@@ -5,18 +5,27 @@ interface SearchFilterProps {
   onSearch: (query: string, minYear: number, maxYear: number) => void;
 }
 
-export default function SearchFilter({ onSearch }: SearchFilterProps) {
-  const [query, setQuery] = useState("");
-  const [minYear, setMinYear] = useState<string>("");
-  const [maxYear, setMaxYear] = useState<string>("");
+export default function SearchFilter(props: SearchFilterProps) {
+  const { onSearch } = props; // Destructure props for clarity
+  const [query, setQuery] = useState<string>("");
+  const [minYear, setMinYear] = useState("");
+  const [maxYear, setMaxYear] = useState("");
+
 
   useEffect(() => {
-    const debounce = setTimeout(() => {
+    // Function to perform the search with the current state values
+    const performSearch = () => {
       onSearch(query, Number(minYear) || 1900, Number(maxYear) || 2024);
-    }, 300);
-
+    };
+  
+    // Sets a timeout to delay the execution of `performSearch` to prevent excessive API calls
+    const debounce = setTimeout(performSearch, 300);
+  
+    // Cleanup function to clear the timeout if dependencies change before the function executes
     return () => clearTimeout(debounce);
-  }, [query, minYear, maxYear, onSearch]);
+  }, [query, minYear, maxYear, onSearch]); // Dependencies: Trigger effect when any of these values change
+  
+  
 
   return (
     <div className="flex flex-col lg:flex-row w-full items-start lg:items-center justify-between gap-6">
