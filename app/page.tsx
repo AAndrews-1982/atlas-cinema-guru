@@ -37,27 +37,31 @@ export default function Page() {
       if (maxYear) params.append("maxYear", maxYear.toString());
       if (genres.length > 0) params.append("genres", genres.join(","));
       params.append("page", currentPage.toString());
-
+  
       const fetchURL = `/api/titles?${params.toString()}`;
       console.log("Fetching from:", fetchURL);
-
+  
       const response = await fetch(fetchURL);
       if (!response.ok) throw new Error(`API Error: ${response.status}`);
-
+  
       const data = await response.json();
       if (!data.titles || !Array.isArray(data.titles)) {
         throw new Error("Invalid API response structure.");
       }
-
+  
       setAllMovies(data.titles);
       setFilteredMovies(data.titles);
-      setTotalPages(Math.ceil(data.titles.length / moviesPerPage));
+
+
+      if (data.totalMovies) {
+      setTotalPages(Math.ceil(data.totalMovies / moviesPerPage)); // Use `totalMovies` from API
+      }
     } catch (err) {
       console.error("Error fetching movies:", err);
     } finally {
       setIsLoading(false);
     }
-  }
+  }  
 
   // Filter movies when search filters change
   useEffect(() => {
@@ -76,21 +80,16 @@ export default function Page() {
     if (genres.length > 0) {
       filtered = filtered.filter((movie) => genres.includes(movie.genre));
     }
-
+  
     setFilteredMovies(filtered);
-    setTotalPages(Math.ceil(filtered.length / moviesPerPage));
-    setCurrentPage(1);
-  }, [query, minYear, maxYear, genres, allMovies]);
-
+  }, [query, minYear, maxYear, genres, allMovies]); // Fix: Don't modify total pages here
+  
   // Fetch movies on initial load or when page changes
   useEffect(() => {
     fetchAllMovies();
   }, [currentPage]);
 
-  const paginatedMovies = filteredMovies.slice(
-    (currentPage - 1) * moviesPerPage,
-    currentPage * moviesPerPage
-  );
+  const paginatedMovies = filteredMovies; // No need to slice since the API handles pagination
 
   return (
     <div className="flex flex-col mb-0 justify-center">

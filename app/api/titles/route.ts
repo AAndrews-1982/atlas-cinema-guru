@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { fetchGenres } from "@/lib/data";
-import { supabase } from "@/lib/db"; // import Supabase
+import { supabase } from "@/lib/db"; // Import Supabase
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -25,12 +25,24 @@ export const GET = async (req: NextRequest) => {
   const genres = params.get("genres")?.split(",") ?? (await fetchGenres());
 
   try {
-    // Fetch titles from Supabase
+    // Fetch total count of titles
+    const { count: totalMovies, error: countError } = await supabase
+      .from("titles")
+      .select("*", { count: "exact" }) // The "exact" count of Movies
+      .gte("released", minYear)
+      .lte("released", maxYear);
+
+    if (countError) throw countError;
+
+    // Fetch paginated titles
+    const start = (page - 1) * 10;
+    const end = start + 9;
     let supabaseQuery = supabase
       .from("titles")
       .select("*")
       .gte("released", minYear)
-      .lte("released", maxYear);
+      .lte("released", maxYear)
+      .range(start, end);
 
     if (query) {
       supabaseQuery = supabaseQuery.ilike("title", `%${query}%`);
@@ -40,14 +52,11 @@ export const GET = async (req: NextRequest) => {
       supabaseQuery = supabaseQuery.in("genre", genres);
     }
 
-    // Pagination (increase results per page if needed)
-    const start = (page - 1) * 10;
-    const end = start + 9;
-    const { data, error } = await supabaseQuery.range(start, end);
+    const { data, error } = await supabaseQuery;
 
     if (error) throw error;
 
-    return NextResponse.json({ titles: data });
+    return NextResponse.json({ titles: data, totalMovies }); // Return `totalMovies`
   } catch (error) {
     console.error("Error fetching titles:", error);
     return NextResponse.json({ error: "Failed to fetch titles" }, { status: 500 });
