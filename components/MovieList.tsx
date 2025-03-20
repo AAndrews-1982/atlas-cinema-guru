@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MovieCard } from "./MovieCard";
+import MovieCard from "./MovieCard";
 
 interface Movie {
   id: string;

@@ -1,99 +1,112 @@
 "use client";
-import Link from "next/link";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import StarOutline from "@/assets/icons/staroutline.svg";
 import StarFull from "@/assets/icons/starfull.svg";
 import ClockOutline from "@/assets/icons/clockoutline.svg";
 import ClockFull from "@/assets/icons/clockfull.svg";
-import Image from "next/image";
-import { useEffect, useState } from "react";
 
-interface Movie {
+// Define Movie interface
+interface Movie extends Record<string, any> {
   id: string;
   title: string;
-  synopsis: string;
+  synopsis?: string;
   released: number;
-  genre: string;
+  genre?: string;
   favorited: boolean;
-  watchLater: boolean;
-  image: string;
+  watchLater?: boolean;
+  image?: string;
 }
 
-type MovieProps = {
+// Define props type
+interface MovieProps {
   movie: Movie;
 };
 
-export function MovieCard({ movie }: MovieProps) {
-  console.log("🎬 Movie Data:", movie); // ✅ Debugging
-  const [inFavorites, setInFavorites] = useState<boolean>(movie.favorited);
-  const [inWatchLater, setInWatchLater] = useState<boolean>(movie.watchLater);
+const MovieCard = ({ movie }: MovieProps) => {
+  // State to track if the movie is in "Favorites" or "Watch Later"
+  const [inFavorites, setInFavorites] = useState<boolean>(false);
+  const [inWatchLater, setInWatchLater] = useState<boolean>(false);
 
-  const toggleFavorite = async (id: string) => {
-    // console.log("favorite button pressed");
-    setInFavorites((prev) => !prev);
-    // makes api call, posts if not in faves, deletes if it is
-    const response = await fetch(`/api/favorites/${id}`, {
-      method: inFavorites ? "DELETE" : "POST",
-    });
-  };
-
-  const toggleWatchLater = async (id: string) => {
-    setInWatchLater((prev) => !prev);
-    // makes api call, posts if not in watchlater, deletes if it is
-    const response = await fetch(`/api/watch-later/${id}`, {
-      method: inWatchLater ? "DELETE" : "POST",
-    });
-  };
-
+  // Update state when movie data changes (e.g., when fetched from API)
   useEffect(() => {
-    setInFavorites(movie.favorited);
-    setInWatchLater(movie.watchLater);
+    setInFavorites(movie.favorited ?? false);
+    setInWatchLater(movie.watchLater ?? false);
   }, [movie.favorited, movie.watchLater]);
 
- //Debugging: Log movie data inside the function
- console.log("Movie Data:", movie);
- console.log("MovieCard image:", movie?.image);
- 
+  // Function to toggle "Favorites" status
+  const toggleFavorite = async (id: string) => {
+    setInFavorites((prev) => !prev);
+    await fetch(`/api/favorites/${id}`, {
+      method: inFavorites ? "DELETE" : "POST", // Remove if already favorited, add otherwise
+    });
+  };
+
+  // Function to toggle "Watch Later" status
+  const toggleWatchLater = async (id: string) => {
+    setInWatchLater((prev) => !prev);
+    await fetch(`/api/watch-later/${id}`, {
+      method: inWatchLater ? "DELETE" : "POST", // Remove if already in watch later, add otherwise
+    });
+  };
   
   return (
-    <div className="relative group shadow-lg border-2 border-teal rounded-2xl h-full w-full">
+    <div className="relative group shadow-lg border border-teal rounded-lg overflow-hidden w-full aspect-square">
+      {/* Movie Image */}
       <img
         src={movie.image}
         alt={movie.title}
-        width={200}
-        height={300}
-        className="size-96 rounded-2xl object-cover w-full aspect-square"
+        width={400}
+        height={400}
+        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
       />
-
-      {/* Overlay */}
-      <div className="absolute h-fit top-3 right-3 flex opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out">
-        <button onClick={() => toggleFavorite(movie.id)} className="px-3">
+  
+      {/* Favorite & Watch Later Icons (Top Right) */}
+      <div className="absolute top-3 right-3 flex gap-2">
+        <button onClick={() => toggleFavorite(movie.id)}>
           <Image
             src={inFavorites ? StarFull.src : StarOutline.src}
             alt="Favorites Icon"
-            width={30}
-            height={30}
-            className="object-cover transition-transform duration-200 transform group-hover:scale-105"
+            width={35}
+            height={35}
+            className="group-hover:scale-110 transition-transform duration-200"
+            style={{
+              filter: inFavorites
+                ? "brightness(0) saturate(100%) invert(92%) sepia(59%) saturate(4585%) hue-rotate(358deg) brightness(99%) contrast(102%)"
+                : "none",
+            }}
           />
         </button>
         <button onClick={() => toggleWatchLater(movie.id)}>
           <Image
             src={inWatchLater ? ClockFull.src : ClockOutline.src}
             alt="Watch Later Icon"
-            width={30}
-            height={30}
-            className="object-cover transition-transform duration-200 transform group-hover:scale-105"
+            width={35}
+            height={35}
+            className="group-hover:scale-110 transition-transform duration-200"
+            style={{
+              filter: inWatchLater
+                ? "brightness(0) saturate(100%) invert(92%) sepia(59%) saturate(4585%) hue-rotate(358deg) brightness(99%) contrast(102%)"
+                : "none",
+            }}
           />
         </button>
       </div>
-      <div className="rounded-b-2xl absolute bottom-0 left-0 right-0 h-1/2 bg-navy opacity-0 group-hover:opacity-90 transition-opacity duration-200 flex flex-col p-4 text-left">
-        <h1 className="text-lg mb-2">
+  
+      {/* Blue Overlay & Text */}
+      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-navy opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out flex flex-col justify-end p-4">
+        <h1 className="text-xl font-bold text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out">
           {movie.title} ({movie.released})
         </h1>
-        <p className="mb-6 text-sm">{movie.synopsis}</p>
-        <div className="genre rounded-full bg-teal p-2 w-fit gap-2 text-black">
+        <p className="text-sm text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out">
+          {movie.synopsis}
+        </p>
+        <div className="mt-2 px-3 py-2 rounded-full bg-teal text-black text-sm w-fit opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out">
           {movie.genre}
         </div>
       </div>
     </div>
   );
-}
+}  
+
+export default MovieCard;
