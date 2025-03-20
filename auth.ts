@@ -1,6 +1,10 @@
-import { type NextAuthConfig } from "next-auth"; // Correct import
+import NextAuth from "next-auth";
+import { type NextAuthConfig } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 
+/**
+ * Define NextAuth options
+ */
 export const authOptions: NextAuthConfig = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
@@ -16,3 +20,8 @@ export const authOptions: NextAuthConfig = {
     },
   },
 };
+
+/**
+ * Initialize and export `auth()`
+ */
+export const { auth } = NextAuth(authOptions);
