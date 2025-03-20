@@ -1,52 +1,32 @@
-import { deleteWatchLater, insertWatchLater, watchLaterExists } from "@/lib/data";
+import { fetchWatchLaters } from "@/lib/data";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 
-export const POST = auth(
-  async (req: NextRequest, ctx: { params: { id: string } }) => {
-    const { id } = await ctx.params; // Ensure params is awaited
+/**
+ * GET /api/watch-Later
+ */
+export const GET = auth(async (req: NextRequest) => {
+  const params = req.nextUrl.searchParams;
+  const page = params.get("page") ? Number(params.get("page")) : 1;
+  const minYear = params.get("minYear") ? Number(params.get("minYear")) : 0;
+  const maxYear = params.get("maxYear")
+    ? Number(params.get("maxYear"))
+    : new Date().getFullYear();
+  const query = params.get("query") ?? "";
 
-    if (!id) {
-      return NextResponse.json({ error: "Missing movie ID" }, { status: 400 });
-    }
-
-    //@ts-ignore
-    if (!req.auth) {
-      return NextResponse.json({ error: "Unauthorized - Not logged in" }, { status: 401 });
-    }
-
-    const {
-      user: { email }, //@ts-ignore
-    } = req.auth;
-
-    const exists = await watchLaterExists(id, email);
-    if (exists) {
-      return NextResponse.json({ message: "Already added to Watch Later" });
-    }
-
-    await insertWatchLater(id, email);
-    return NextResponse.json({ message: "Watch Later Added" });
+  //@ts-ignore
+  if (!req.auth) {
+    return NextResponse.json(
+      { error: "Unauthorized - Not logged in" },
+      { status: 401 }
+    );
   }
-);
 
-export const DELETE = auth(
-  async (req: NextRequest, ctx: { params: { id: string } }) => {
-    const { id } = await ctx.params; // Ensure params is awaited
+  const {
+    user: { email }, //@ts-ignore
+  } = req.auth;
 
-    if (!id) {
-      return NextResponse.json({ error: "Missing movie ID" }, { status: 400 });
-    }
+  const watchLater = await fetchWatchLaters(page, email);
 
-    //@ts-ignore
-    if (!req.auth) {
-      return NextResponse.json({ error: "Unauthorized - Not logged in" }, { status: 401 });
-    }
-
-    const {
-      user: { email }, //@ts-ignore
-    } = req.auth;
-
-    await deleteWatchLater(id, email);
-    return NextResponse.json({ message: "Watch Later removed" });
-  }
-);
+  return NextResponse.json({ watchLater });
+});

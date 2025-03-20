@@ -281,17 +281,3 @@ export async function deleteWatchLater(title_id: string, userEmail: string) {
     throw new Error("Failed to remove from watch later.");
   }
 }
-
-export {
-  fetchTitles,
-  fetchGenres,
-  fetchActivities,
-  fetchFavorites,
-  favoriteExists,
-  insertFavorite,
-  fetchWatchLaters,
-  watchLaterExists,
-  insertWatchLater,
-  deleteFavorite,
-  deleteWatchLater
-};

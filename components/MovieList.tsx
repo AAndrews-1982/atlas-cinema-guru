@@ -14,15 +14,21 @@ interface Movie {
 
 interface MovieListProps {
   movieList: Movie[];
+  totalMovies: number;
 }
 
-const MovieList = ({ movieList }: MovieListProps) => {
+const MovieList = ({ movieList, totalMovies }: MovieListProps) => {
   console.log("Rendering MovieList with movies:", movieList); // Debugging
 
-  // Storing favorites and watchLaters in a set for optimized lookups
+  const moviesPerPage = 6; // Define movies per page
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [visibleMovies, setVisibleMovies] = useState<Movie[]>([]);
+
+  // State for tracking favorite and watch later movies
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [watchLater, setWatchLater] = useState<Set<string>>(new Set());
 
+  // Fetch user's favorites and watch later movies
   useEffect(() => {
     const fetchFlags = async () => {
       try {
@@ -34,15 +40,8 @@ const MovieList = ({ movieList }: MovieListProps) => {
         const favoritesData = await favoritesRes.json();
         const watchLaterData = await watchLaterRes.json();
 
-        const favoritesArray = Array.isArray(favoritesData.favorites)
-          ? favoritesData.favorites
-          : [];
-        const watchLaterArray = Array.isArray(watchLaterData.watchLater)
-          ? watchLaterData.watchLater
-          : [];
-
-        setFavorites(new Set(favoritesArray.map((movie: Movie) => movie.id)));
-        setWatchLater(new Set(watchLaterArray.map((movie: Movie) => movie.id)));
+        setFavorites(new Set(favoritesData.favorites?.map((movie: Movie) => movie.id) || []));
+        setWatchLater(new Set(watchLaterData.watchLater?.map((movie: Movie) => movie.id) || []));
       } catch (err) {
         console.error("Error fetching favorites and watch later data:", err);
       }
@@ -50,11 +49,28 @@ const MovieList = ({ movieList }: MovieListProps) => {
     fetchFlags();
   }, []);
 
+  // Update the displayed movies based on the current page
+  useEffect(() => {
+    console.log(`Current Page: ${currentPage}`);
+    console.log("Total Movies Available:", totalMovies);
+    console.log("Full Movie List (Before Slicing):", movieList);
+  
+    const startIdx = (currentPage - 1) * moviesPerPage;
+    const endIdx = startIdx + moviesPerPage;
+  
+    const slicedMovies = movieList.slice(startIdx, endIdx);
+    console.log("Sliced Movies (Movies to Display):", slicedMovies);
+  
+    setVisibleMovies(slicedMovies);
+  }, [currentPage, movieList]);
+  
+
   return (
-    <div className="px-24 flex justify-center">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 md:gap-x-16 lg:gap-x-8 gap-y-4 mb-3">
-        {movieList && movieList.length > 0 ? (
-          movieList.map((movie) => (
+    <div className="flex flex-col items-center justify-center w-full">
+      {/* Movie Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+        {visibleMovies.length > 0 ? (
+          visibleMovies.map((movie) => (
             <MovieCard
               key={movie.id}
               movie={{
