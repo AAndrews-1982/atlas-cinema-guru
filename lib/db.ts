@@ -9,7 +9,7 @@ console.log("Supabase URL:", supabaseUrl);
 console.log("Supabase ANON Key:", supabaseAnonKey ? "Exists" : "Missing");
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error("🚨 Missing Supabase credentials. Check your environment variables.");
+  throw new Error("Missing Supabase credentials. Check your environment variables.");
 }
 
 // Initialize Supabase client
