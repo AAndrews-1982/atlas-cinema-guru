@@ -1,12 +1,8 @@
-import NextAuth from "next-auth";
+import { type NextAuthConfig } from "next-auth"; // Correct import
 import GitHubProvider from "next-auth/providers/github";
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
-  theme: {
-    brandColor: "#1ED2AF",
-    logo: "/logo.png",
-    buttonText: "#ffffff",
-  },
+export const authOptions: NextAuthConfig = {
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
@@ -14,8 +10,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    authorized: async ({ auth }) => {
-      return !!auth; // Ensures only authenticated users can proceed
+    session: async ({ session, token }) => {
+      session.user.id = token.sub as string;
+      return session;
     },
   },
-});
+};
