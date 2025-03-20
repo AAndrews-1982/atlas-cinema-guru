@@ -1,22 +1,22 @@
 import { createClient } from "@supabase/supabase-js";
 
-//Initialize Supabase client
-const supabaseUrl = process.env.SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+// Read env variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-// Use Supabase pooled connection instead of direct connection
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Log to confirm they exist
+console.log("Supabase URL:", supabaseUrl);
+console.log("Supabase ANON Key:", supabaseAnonKey ? "Exists" : "Missing");
 
-export interface Database {
-  titles: TitlesTable;
-  users: UsersTable;
-  favorites: FavoritesTable;
-  watchlater: WatchLaterTable;
-  activities: ActivitiesTable;
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error("🚨 Missing Supabase credentials. Check your environment variables.");
 }
 
+// Initialize Supabase client
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
 export interface TitlesTable {
-  id: Generated<string>;
+  id: string;
   title: string;
   synopsis: string;
   released: number;
@@ -24,31 +24,31 @@ export interface TitlesTable {
 }
 
 export interface UsersTable {
-  id: Generated<string>;
+  id: string;
   name: string;
   email: string;
   password: string;
 }
 
 export interface FavoritesTable {
-  id: Generated<string>;
-  title_id: string; // Removed Generated<string> to avoid auto-generation issues
+  id: string;
+  title_id: string;
   user_id: string;
 }
 
 export interface WatchLaterTable {
-  id: Generated<string>;
+  id: string;
   title_id: string;
   user_id: string;
 }
 
 export interface ActivitiesTable {
-  id: Generated<string>;
+  id: string;
   timestamp: Date;
   title_id: string;
   user_id: string;
   activity: "FAVORITED" | "WATCH_LATER";
 }
 
-//Ensure the correct client is exported
+// Ensure correct client export
 export default supabase;
