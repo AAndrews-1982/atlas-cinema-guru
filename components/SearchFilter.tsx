@@ -1,9 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 
+// Define a function type for handling search operations
+type SearchHandler = (query: string, minYear: number, maxYear: number) => void;
+
+// Interface for the SearchFilter component props
+// Ensures that the component receives an `onSearch` function that adheres to the `SearchHandler` type
 interface SearchFilterProps {
-  onSearch: (query: string, minYear: number, maxYear: number) => void;
+  onSearch: SearchHandler; // Function to execute when search criteria change
 }
+
 
 export default function SearchFilter(props: SearchFilterProps) {
   const { onSearch } = props; // Destructure props for clarity
