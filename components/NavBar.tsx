@@ -1,6 +1,7 @@
 // Header NavBar
 import Film from "@/assets/icons/film.svg";
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth"; // Keep `auth` from your custom config
+import { signOut } from "next-auth/react"; // Import `signOut` from `next-auth/react`
 import { FiLogOut } from "react-icons/fi";
 
 const NavBar = async () => {
